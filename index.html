@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>Запись</title>
+<style>
+:root{
+  --bg:#f5efe6;--surface:#fffaf3;--text:#2a2018;--muted:#76675a;--line:#e2d5c3;
+  --accent:#8f5328;--accent-press:#76431f;--on-accent:#fff;--chip:#fffaf3;--sel:#f0dcc6;
+  --warn-bg:#fbeee0;--focus:#c7782f;--shadow:0 -6px 18px rgba(60,40,20,.08);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1a1612;--surface:#241e18;--text:#f0e7db;--muted:#ad9e8c;--line:#3a3128;
+  --accent:#d39a62;--accent-press:#e3ad78;--on-accent:#1a1612;--chip:#241e18;--sel:#4a3423;
+  --warn-bg:#2e241b;--focus:#e8b47f;--shadow:0 -6px 18px rgba(0,0,0,.35);
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.4 system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:480px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(140px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+h1{font-size:26px;line-height:1.2;margin:4px 0 6px;font-weight:700}
+.sub{color:var(--muted);font-size:15px;margin:0 0 4px}
+h2{font-size:15px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:26px 0 10px}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,.msg:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.svc{display:flex;flex-direction:column;gap:8px}
+.card{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:60px;padding:12px 16px;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px}
+.card b{font-weight:600;display:block}
+.card small{color:var(--muted);font-size:15px}
+.card .p{font-weight:600;white-space:nowrap}
+.card[aria-pressed=true],.chip[aria-pressed=true]{border-color:var(--accent);background:var(--sel)}
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none;scroll-snap-type:x proximity}
+.days::-webkit-scrollbar{display:none}
+.chip{min-height:48px;min-width:72px;padding:8px 12px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;font-size:17px;flex:0 0 auto;scroll-snap-align:start}
+.day{display:flex;flex-direction:column;align-items:center;line-height:1.2;min-width:68px}
+.day small{color:var(--muted);font-size:13px}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.times .chip{min-width:0;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:14px;margin:8px 0 0}
+.box{background:var(--warn-bg);border:1.5px solid var(--line);border-radius:14px;padding:16px;margin-top:20px}
+.box p{margin:0 0 12px}
+.msg{white-space:pre-wrap;word-break:break-word;background:var(--surface);border:1.5px dashed var(--line);border-radius:10px;padding:12px;margin:0 0 12px;-webkit-user-select:all;user-select:all;font-size:16px}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;padding:12px 16px;border-radius:14px;border:0;background:var(--accent);color:var(--on-accent);font-size:18px;font-weight:600}
+.btn:active{background:var(--accent-press)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn2{background:transparent;color:var(--text);border:1.5px solid var(--line);margin-top:10px;font-weight:500}
+.btn2:active{background:var(--sel)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--bg);box-shadow:var(--shadow);padding:10px calc(16px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+.bar>div{max-width:480px;margin:0 auto}
+.sum{font-size:15px;color:var(--muted);margin:0 0 8px;text-align:center;min-height:21px}
+.sum b{color:var(--text);font-weight:600}
+.big{font-size:20px;margin:28px 0 16px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div class="bar" id="bar" hidden><div><p class="sum" id="sum" aria-live="polite"></p><button class="btn" id="go" type="button" disabled></button></div></div>
+<script>
+(function () {
+'use strict';
+var ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+var VALID_MINUTES = 1440;
+var RU_LANGS = ['ru', 'uk', 'be', 'kk', 'ky', 'uz', 'tg'];
+
+var T = {
+  ru: {
+    title: 'Запись', freeAt: 'Свободное время на', validTo: 'ссылка действует до',
+    service: 'Услуга', day: 'День', time: 'Время',
+    masterTime: 'Время указано по часовому поясу мастера',
+    book: 'Записаться', chooseSvc: 'Выберите услугу', chooseDay: 'Выберите день', chooseTime: 'Выберите время',
+    codeLabel: 'Код записи', h: 'ч', min: 'мин',
+    wd: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+    noFree: 'Свободного времени нет, напишите мастеру.',
+    expired: 'Ссылка устарела, напишите мастеру.',
+    broken: 'Ссылка повреждена, попросите мастера прислать новую.',
+    after: 'Если чат не открылся с готовым текстом — текст уже скопирован: вставьте его и отправьте.',
+    copied: 'Текст скопирован. Отправьте его мастеру.',
+    maxHint: 'Текст скопирован. Откройте MAX, найдите мастера по номеру {p} и вставьте сообщение.',
+    copyAgain: 'Скопировать ещё раз', copy: 'Скопировать', copyDone: 'Скопировано ✓',
+    openTg: 'Написать в Telegram', openWa: 'Написать в WhatsApp', openMax: 'Позвонить мастеру', callNum: 'Открыть номер {p}',
+    noChannel: 'Отправьте этот текст мастеру удобным способом.'
+  },
+  en: {
+    title: 'Booking', freeAt: 'Free time as of', validTo: 'link valid until',
+    service: 'Service', day: 'Day', time: 'Time',
+    masterTime: 'Times are shown in the master’s time zone',
+    book: 'Book', chooseSvc: 'Choose a service', chooseDay: 'Choose a day', chooseTime: 'Choose a time',
+    codeLabel: 'Booking code', h: 'h', min: 'min',
+    wd: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    noFree: 'No free time left — please message the master.',
+    expired: 'This link has expired — please message the master.',
+    broken: 'This link is damaged — please ask the master for a new one.',
+    after: 'If the chat didn’t open with the text filled in, it’s already copied: paste it and send.',
+    copied: 'Text copied. Send it to the master.',
+    maxHint: 'Text copied. Open MAX, find the master by number {p} and paste the message.',
+    copyAgain: 'Copy again', copy: 'Copy', copyDone: 'Copied ✓',
+    openTg: 'Message on Telegram', openWa: 'Message on WhatsApp', openMax: 'Call the master', callNum: 'Open number {p}',
+    noChannel: 'Send this text to the master any way you like.'
+  }
+};
+
+function pickLang(navLang) {
+  var l = String(navLang || '').toLowerCase().slice(0, 2);
+  return RU_LANGS.indexOf(l) >= 0 ? 'ru' : 'en';
+}
+
+/* ---------- decoding ---------- */
+function b64urlToBytes(s) {
+  if (!/^[A-Za-z0-9_-]+$/.test(s) || s.length % 4 === 1) return null;
+  var b = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (b.length % 4) b += '=';
+  var bin = atob(b), out = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+function isInt(x) { return typeof x === 'number' && Math.floor(x) === x; }
+function isStr(x) { return typeof x === 'string'; }
+
+/* returns payload object or null */
+function decode(hash) {
+  try {
+    var s = String(hash || '').replace(/^#/, '');
+    if (!s) return null;
+    var bytes = b64urlToBytes(s);
+    if (!bytes) return null;
+    var a = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+    if (!Array.isArray(a) || a.length < 12 || a[0] !== 1) return null;
+    if (!isInt(a[1]) || !isInt(a[2]) || !isStr(a[3]) || a[3].length !== 1 || ALPHABET.indexOf(a[3]) < 0) return null;
+    if (!isStr(a[4]) || !/^\d{4}-\d{2}-\d{2}$/.test(a[4])) return null;
+    if (!isStr(a[5]) || !isStr(a[6]) || !isStr(a[7]) || !isInt(a[8]) || a[8] < 1 || !isStr(a[9])) return null;
+    if (!Array.isArray(a[10]) || !Array.isArray(a[11])) return null;
+    var services = a[10].map(function (x) {
+      if (!Array.isArray(x) || !isStr(x[0]) || !isInt(x[1]) || x[1] < 1 || !isInt(x[2])) throw 0;
+      return { name: x[0], dur: x[1], price: x[2] };
+    });
+    var days = a[11].map(function (x) {
+      if (!Array.isArray(x) || !isInt(x[0]) || x.length % 2 !== 1) throw 0;
+      var w = [];
+      for (var i = 1; i < x.length; i += 2) {
+        if (!isInt(x[i]) || !isInt(x[i + 1])) throw 0;
+        w.push([x[i], x[i + 1]]);
+      }
+      return { offset: x[0], windows: w };
+    });
+    return { created: a[1], tz: a[2], linkId: a[3], base: a[4], name: a[5], ch: a[6], contact: a[7],
+      step: a[8], msg: a[9], services: services, days: days };
+  } catch (e) { return null; }
+}
+
+/* ---------- time ---------- */
+function baseUtcMs(base) {
+  var p = base.split('-');
+  return Date.UTC(+p[0], +p[1] - 1, +p[2]);
+}
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+/* "05.10" for base + offset */
+function dayDate(base, offset) {
+  var d = new Date(baseUtcMs(base) + offset * 86400000);
+  return { dd: pad2(d.getUTCDate()) + '.' + pad2(d.getUTCMonth() + 1), wd: d.getUTCDay() };
+}
+function hm(min) { return Math.floor(min / 60) + ':' + pad2(min % 60); }
+/* absolute UTC minute -> "DD.MM, H:MM" in master tz */
+function stamp(utcMin, tz) {
+  var d = new Date((utcMin + tz) * 60000);
+  return pad2(d.getUTCDate()) + '.' + pad2(d.getUTCMonth() + 1) + ', ' + hm(d.getUTCHours() * 60 + d.getUTCMinutes());
+}
+function isExpired(p, nowMin) { return nowMin > p.created + VALID_MINUTES; }
+
+/* starts per day for service index si: [{offset, starts:[min...]}], only days with starts */
+function slots(p, si, nowMin) {
+  var dur = p.services[si].dur, step = p.step, b = baseUtcMs(p.base) / 60000, res = [];
+  p.days.forEach(function (day) {
+    var dayStart = b + day.offset * 1440 - p.tz, starts = [];
+    day.windows.forEach(function (w) {
+      for (var t = w[0]; t + dur <= w[1]; t += step) {
+        if (dayStart + t > nowMin && starts.indexOf(t) < 0) starts.push(t);
+      }
+    });
+    starts.sort(function (x, y) { return x - y; });
+    if (starts.length) res.push({ offset: day.offset, starts: starts });
+  });
+  return res;
+}
+
+/* ---------- code & message ---------- */
+function code(linkId, si, offset, startMin) {
+  var v = (si * 32 + offset) * 288 + Math.floor(startMin / 5), s = '';
+  for (var i = 0; i < 4; i++) { s = ALPHABET.charAt(v % 32) + s; v = Math.floor(v / 32); }
+  return linkId + s;
+}
+function buildMessage(p, si, offset, startMin, lang) {
+  var t = p.msg.split('[услуга]').join(p.services[si].name)
+    .split('[дата]').join(dayDate(p.base, offset).dd)
+    .split('[время]').join(hm(startMin))
+    .split('[имя мастера]').join(p.name);
+  return t + '\n' + T[lang].codeLabel + ': ' + code(p.linkId, si, offset, startMin);
+}
+
+/* ---------- formatting ---------- */
+function fmtDur(m, lang) {
+  var h = Math.floor(m / 60), mm = m % 60, L = T[lang];
+  return (h ? h + ' ' + L.h : '') + (h && mm ? ' ' : '') + (mm || !h ? mm + ' ' + L.min : '');
+}
+function fmtPrice(kop, lang) {
+  var r = Math.floor(kop / 100), k = kop % 100;
+  var s = String(r).replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'ru' ? ' ' : ',');
+  if (k) s += (lang === 'ru' ? ',' : '.') + pad2(k);
+  return s + ' ₽';
+}
+function fmtPhone(d) {
+  var m = /^7(\d{3})(\d{3})(\d{2})(\d{2})$/.exec(d);
+  return m ? '+7\u00a0' + m[1] + '\u00a0' + m[2] + '\u2011' + m[3] + '\u2011' + m[4] : '+' + d;
+}
+function digits(s) { return String(s || '').replace(/\D/g, ''); }
+/* messenger URL; text may be '' */
+function chatUrl(p, text) {
+  var q = text ? '?text=' + encodeURIComponent(text) : '';
+  var c = String(p.contact || '').trim().replace(/^@/, '');
+  if (p.ch === 'wa' && digits(c)) return 'https://wa.me/' + digits(c) + q;
+  if (p.ch === 'tg' && c) {
+    if (/^\+?[\d\s()-]+$/.test(c)) return 'https://t.me/+' + digits(c) + q;
+    if (/^[A-Za-z0-9_]{3,}$/.test(c)) return 'https://t.me/' + c + q;
+  }
+  if (p.ch === 'max' && digits(c)) return 'tel:+' + digits(c);
+  return '';
+}
+
+var api = { ALPHABET: ALPHABET, T: T, pickLang: pickLang, decode: decode, slots: slots, code: code,
+  buildMessage: buildMessage, isExpired: isExpired, dayDate: dayDate, hm: hm, stamp: stamp,
+  fmtDur: fmtDur, fmtPrice: fmtPrice, chatUrl: chatUrl };
+if (typeof document === 'undefined' || !document.getElementById) { globalThis.BookingLogic = api; return; }
+
+/* ================= UI ================= */
+var lang = pickLang(navigator.language), L = T[lang];
+document.documentElement.lang = lang;
+var app = document.getElementById('app'), bar = document.getElementById('bar'),
+  sum = document.getElementById('sum'), go = document.getElementById('go');
+var P = null, st = { si: -1, day: -1, t: -1 };
+
+function nowMin() { return Date.now() / 60000; }
+function el(tag, attrs, kids) {
+  var e = document.createElement(tag);
+  for (var k in attrs || {}) {
+    if (k === 'text') e.textContent = attrs[k];
+    else if (k === 'on') e.addEventListener('click', attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(function (c) { if (c) e.appendChild(c); });
+  return e;
+}
+function copyText(text) {
+  var ok = false;
+  try {
+    var ta = el('textarea', { readonly: '', 'aria-hidden': 'true',
+      style: 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px' });
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); ta.setSelectionRange(0, text.length);
+    ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+  } catch (e) {}
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(function () {}); } catch (e) {}
+  return ok;
+}
+function copyBtn(text, label) {
+  var b = el('button', { type: 'button', class: 'btn btn2', text: label });
+  b.addEventListener('click', function () {
+    copyText(text); b.textContent = L.copyDone;
+    setTimeout(function () { b.textContent = label; }, 2000);
+  });
+  return b;
+}
+function channelBtn(p, text, cls) {
+  var url = chatUrl(p, text);
+  if (!url) return null;
+  var label = p.ch === 'wa' ? L.openWa : p.ch === 'tg' ? L.openTg : L.callNum.replace('{p}', fmtPhone(digits(p.contact)));
+  return el('button', { type: 'button', class: cls || 'btn', text: label, on: function () { location.href = url; } });
+}
+function header(p) {
+  document.title = p.name || L.title;
+  app.appendChild(el('h1', { text: p.name || L.title }));
+  app.appendChild(el('p', { class: 'sub',
+    text: L.freeAt + ' ' + stamp(p.created, p.tz) + ' · ' + L.validTo + ' ' + stamp(p.created + VALID_MINUTES, p.tz) }));
+}
+function screen(msgText, p) {
+  app.textContent = ''; bar.hidden = true;
+  if (p) header(p);
+  app.appendChild(el('p', { class: 'big', text: msgText }));
+  if (p) { var b = channelBtn(p, ''); if (b) app.appendChild(b); }
+}
+
+function render() {
+  if (isExpired(P, nowMin())) return screen(L.expired, P);
+  app.textContent = '';
+  header(P);
+  var now = nowMin(), avail = [];
+  P.services.forEach(function (_, i) { if (slots(P, i, now).length) avail.push(i); });
+  if (!avail.length) return screen(L.noFree, P);
+  if (avail.length === 1) st.si = avail[0];
+
+  app.appendChild(el('h2', { text: L.service }));
+  app.appendChild(el('div', { class: 'svc', role: 'group', 'aria-label': L.service }, avail.map(function (i) {
+    var s = P.services[i];
+    return el('button', { type: 'button', class: 'card', 'aria-pressed': String(st.si === i),
+      on: function () { if (st.si !== i) { st.si = i; st.day = -1; st.t = -1; render(); } } }, [
+      el('span', {}, [el('b', { text: s.name }), el('small', { text: fmtDur(s.dur, lang) })]),
+      s.price > 0 ? el('span', { class: 'p', text: fmtPrice(s.price, lang) }) : null
+    ]);
+  })));
+
+  if (st.si >= 0) {
+    var days = slots(P, st.si, now);
+    app.appendChild(el('h2', { text: L.day }));
+    if (!days.length) {
+      app.appendChild(el('p', { text: L.noFree }));
+    } else {
+      if (days.length === 1 && st.day < 0) st.day = days[0].offset;
+      var strip = el('div', { class: 'days', role: 'group', 'aria-label': L.day }, days.map(function (d) {
+        var dd = dayDate(P.base, d.offset);
+        return el('button', { type: 'button', class: 'chip day', 'aria-pressed': String(st.day === d.offset),
+          on: function () { st.day = d.offset; st.t = -1; render(); } },
+          [el('small', { text: L.wd[dd.wd] }), el('span', { text: dd.dd })]);
+      }));
+      app.appendChild(strip);
+      var cur = days.filter(function (d) { return d.offset === st.day; })[0];
+      if (cur) {
+        app.appendChild(el('h2', { text: L.time }));
+        app.appendChild(el('div', { class: 'times', role: 'group', 'aria-label': L.time }, cur.starts.map(function (t) {
+          return el('button', { type: 'button', class: 'chip', 'aria-pressed': String(st.t === t),
+            on: function () { st.t = t; render(); } }, [document.createTextNode(hm(t))]);
+        })));
+        if (-new Date().getTimezoneOffset() !== P.tz) app.appendChild(el('p', { class: 'note', text: L.masterTime }));
+      }
+      var sel = strip.querySelector('[aria-pressed=true]');
+      if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  }
+
+  bar.hidden = false;
+  go.textContent = L.book;
+  go.disabled = !(st.si >= 0 && st.day >= 0 && st.t >= 0);
+  if (go.disabled) {
+    sum.textContent = st.si < 0 ? L.chooseSvc : st.day < 0 ? L.chooseDay : L.chooseTime;
+  } else {
+    sum.textContent = '';
+    sum.appendChild(el('b', { text: P.services[st.si].name }));
+    sum.appendChild(document.createTextNode(' · ' + dayDate(P.base, st.day).dd + ', ' + hm(st.t)));
+  }
+}
+
+function afterBook(text) {
+  var old = document.getElementById('after');
+  if (old) old.remove();
+  var url = chatUrl(P, text), hint;
+  if (P.ch === 'max' && url) hint = L.maxHint.replace('{p}', fmtPhone(digits(P.contact)));
+  else if (url) hint = L.after;
+  else hint = L.noChannel;
+  var box = el('div', { class: 'box', id: 'after', role: 'status' }, [
+    el('p', { text: hint }),
+    el('div', { class: 'msg', tabindex: '0', text: text }),
+    copyBtn(text, url ? L.copyAgain : L.copy),
+    P.ch === 'max' ? channelBtn(P, text, 'btn btn2') : null
+  ]);
+  app.appendChild(box);
+  box.scrollIntoView && box.scrollIntoView({ block: 'center' });
+  return url;
+}
+
+go.addEventListener('click', function () {
+  if (go.disabled) return;
+  if (isExpired(P, nowMin())) return screen(L.expired, P);
+  var text = buildMessage(P, st.si, st.day, st.t, lang);
+  copyText(text);
+  var url = afterBook(text);
+  if (url && P.ch !== 'max') setTimeout(function () { location.href = url; }, 150);
+});
+
+function start() {
+  st = { si: -1, day: -1, t: -1 };
+  P = decode(location.hash);
+  if (!P) { document.title = L.title; return screen(L.broken, null); }
+  render();
+}
+window.addEventListener('hashchange', start);
+start();
+})();
+</script>
+</body>
+</html>

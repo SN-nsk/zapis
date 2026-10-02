@@ -84,7 +84,9 @@ var T = {
     maxHint: 'Текст скопирован. Откройте MAX, найдите мастера по номеру {p} и вставьте сообщение.',
     copyAgain: 'Скопировать ещё раз', copy: 'Скопировать', copyDone: 'Скопировано ✓',
     openTg: 'Написать в Telegram', openWa: 'Написать в WhatsApp', openMax: 'Позвонить мастеру', callNum: 'Открыть номер {p}',
-    noChannel: 'Отправьте этот текст мастеру удобным способом.'
+    noChannel: 'Отправьте этот текст мастеру удобным способом.',
+    pickChannel: 'Текст скопирован. Выберите, куда отправить его мастеру:',
+    maxNum: 'MAX: номер {p}'
   },
   en: {
     title: 'Booking', freeAt: 'Free time as of', validTo: 'link valid until',
@@ -101,7 +103,9 @@ var T = {
     maxHint: 'Text copied. Open MAX, find the master by number {p} and paste the message.',
     copyAgain: 'Copy again', copy: 'Copy', copyDone: 'Copied ✓',
     openTg: 'Message on Telegram', openWa: 'Message on WhatsApp', openMax: 'Call the master', callNum: 'Open number {p}',
-    noChannel: 'Send this text to the master any way you like.'
+    noChannel: 'Send this text to the master any way you like.',
+    pickChannel: 'Text copied. Choose where to send it to the master:',
+    maxNum: 'MAX: number {p}'
   }
 };
 
@@ -219,21 +223,32 @@ function fmtPhone(d) {
 }
 function digits(s) { return String(s || '').replace(/\D/g, ''); }
 /* messenger URL; text may be '' */
-function chatUrl(p, text) {
-  var q = text ? '?text=' + encodeURIComponent(text) : '';
-  var c = String(p.contact || '').trim().replace(/^@/, '');
-  if (p.ch === 'wa' && digits(c)) return 'https://wa.me/' + digits(c) + q;
-  if (p.ch === 'tg' && c) {
-    if (/^\+?[\d\s()-]+$/.test(c)) return 'https://t.me/+' + digits(c) + q;
-    if (/^[A-Za-z0-9_]{3,}$/.test(c)) return 'https://t.me/' + c + q;
+/* channels of the master: ch / contact may be comma lists ("tg,wa,max" / "nick,7913...,7913...") */
+function channels(p) {
+  var chs = String(p.ch || '').split(','), cs = String(p.contact || '').split(','), out = [];
+  for (var i = 0; i < chs.length; i++) {
+    var c = { ch: chs[i].trim(), contact: String(cs[i] || '').trim() };
+    if (chatUrlFor(c, '')) out.push(c);
   }
-  if (p.ch === 'max' && digits(c)) return 'tel:+' + digits(c);
+  return out;
+}
+function chatUrlFor(c, text) {
+  var q = text ? '?text=' + encodeURIComponent(text) : '';
+  var v = String(c.contact || '').trim().replace(/^@/, '');
+  if (c.ch === 'wa' && digits(v)) return 'https://wa.me/' + digits(v) + q;
+  if (c.ch === 'tg' && v) {
+    if (/^\+?[\d\s()-]+$/.test(v)) return 'https://t.me/+' + digits(v) + q;
+    if (/^[A-Za-z0-9_]{3,}$/.test(v)) return 'https://t.me/' + v + q;
+  }
+  if (c.ch === 'max' && digits(v)) return 'tel:+' + digits(v);
   return '';
 }
+/* first channel (old single-channel links) */
+function chatUrl(p, text) { var cs = channels(p); return cs.length ? chatUrlFor(cs[0], text) : ''; }
 
 var api = { ALPHABET: ALPHABET, T: T, pickLang: pickLang, decode: decode, slots: slots, code: code,
   buildMessage: buildMessage, isExpired: isExpired, dayDate: dayDate, hm: hm, stamp: stamp,
-  fmtDur: fmtDur, fmtPrice: fmtPrice, chatUrl: chatUrl };
+  fmtDur: fmtDur, fmtPrice: fmtPrice, chatUrl: chatUrl, channels: channels, chatUrlFor: chatUrlFor };
 if (typeof document === 'undefined' || !document.getElementById) { globalThis.BookingLogic = api; return; }
 
 /* ================= UI ================= */
@@ -275,10 +290,10 @@ function copyBtn(text, label) {
   });
   return b;
 }
-function channelBtn(p, text, cls) {
-  var url = chatUrl(p, text);
+function channelBtn(c, text, cls) {
+  var url = chatUrlFor(c, text);
   if (!url) return null;
-  var label = p.ch === 'wa' ? L.openWa : p.ch === 'tg' ? L.openTg : L.callNum.replace('{p}', fmtPhone(digits(p.contact)));
+  var label = c.ch === 'wa' ? L.openWa : c.ch === 'tg' ? L.openTg : L.maxNum.replace('{p}', fmtPhone(digits(c.contact)));
   return el('button', { type: 'button', class: cls || 'btn', text: label, on: function () { location.href = url; } });
 }
 function header(p) {
@@ -291,7 +306,7 @@ function screen(msgText, p) {
   app.textContent = ''; bar.hidden = true;
   if (p) header(p);
   app.appendChild(el('p', { class: 'big', text: msgText }));
-  if (p) { var b = channelBtn(p, ''); if (b) app.appendChild(b); }
+  if (p) channels(p).forEach(function (c, i) { var b = channelBtn(c, '', i ? 'btn btn2' : 'btn'); if (b) app.appendChild(b); });
 }
 
 function render() {
@@ -353,22 +368,26 @@ function render() {
   }
 }
 
+/* returns the URL to open right away (only when the master has exactly one chat channel) */
 function afterBook(text) {
   var old = document.getElementById('after');
   if (old) old.remove();
-  var url = chatUrl(P, text), hint;
-  if (P.ch === 'max' && url) hint = L.maxHint.replace('{p}', fmtPhone(digits(P.contact)));
-  else if (url) hint = L.after;
-  else hint = L.noChannel;
-  var box = el('div', { class: 'box', id: 'after', role: 'status' }, [
-    el('p', { text: hint }),
-    el('div', { class: 'msg', tabindex: '0', text: text }),
-    copyBtn(text, url ? L.copyAgain : L.copy),
-    P.ch === 'max' ? channelBtn(P, text, 'btn btn2') : null
-  ]);
+  var cs = channels(P), hint, auto = '';
+  if (!cs.length) hint = L.noChannel;
+  else if (cs.length > 1) hint = L.pickChannel;
+  else if (cs[0].ch === 'max') hint = L.maxHint.replace('{p}', fmtPhone(digits(cs[0].contact)));
+  else { hint = L.after; auto = chatUrlFor(cs[0], text); }
+  var kids = [el('p', { text: hint })];
+  if (cs.length > 1 || (cs.length === 1 && cs[0].ch === 'max')) {
+    cs.forEach(function (c) { kids.push(channelBtn(c, text, 'btn')); });
+    if (cs.some(function (c) { return c.ch === 'max'; }) && cs.length > 1) kids.push(el('p', { class: 'note', text: L.maxHint.replace('{p}', fmtPhone(digits(cs.filter(function (c) { return c.ch === 'max'; })[0].contact))) }));
+  }
+  kids.push(el('div', { class: 'msg', tabindex: '0', text: text }));
+  kids.push(copyBtn(text, cs.length ? L.copyAgain : L.copy));
+  var box = el('div', { class: 'box', id: 'after', role: 'status' }, kids);
   app.appendChild(box);
   box.scrollIntoView && box.scrollIntoView({ block: 'center' });
-  return url;
+  return auto;
 }
 
 go.addEventListener('click', function () {
@@ -377,7 +396,7 @@ go.addEventListener('click', function () {
   var text = buildMessage(P, st.si, st.day, st.t, lang);
   copyText(text);
   var url = afterBook(text);
-  if (url && P.ch !== 'max') setTimeout(function () { location.href = url; }, 150);
+  if (url) setTimeout(function () { location.href = url; }, 150);
 });
 
 function start() {

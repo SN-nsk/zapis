@@ -1,0 +1,24 @@
+{
+  "format": 1,
+  "items": [
+    {
+      "id": "2026-10-04-welcome",
+      "date": "2026-10-04",
+      "kind": "news",
+      "title": {
+        "ru": "В приложении появился раздел «Новости»",
+        "en": "The app now has a News section"
+      },
+      "text": {
+        "ru": "Здесь будут появляться новости об обновлениях, советы и короткие опросы. Отвечать необязательно, но каждый ответ помогает сделать «Мастерио» удобнее. Если что-то неудобно или есть идея — напишите в нашу группу в Telegram.",
+        "en": "News about updates, tips and short surveys will appear here. Answering is optional, but every answer helps make Masterio better. If something is inconvenient or you have an idea, write to our Telegram group."
+      },
+      "button": {
+        "ru": "Открыть группу",
+        "en": "Open the group"
+      },
+      "url": "https://t.me/masterio_club",
+      "notify": false
+    }
+  ]
+}

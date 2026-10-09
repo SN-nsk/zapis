@@ -1,7 +1,17 @@
 {
   "format": 1,
-  "payEnabled": false,
+  "payEnabled": true,
+  "payUrl": "https://sn-nsk.github.io/zapis/pro.html",
+  "prices": [
+    {"title": {"ru": "6 месяцев", "en": "6 months"}, "price": "2 990 ₽"},
+    {"title": {"ru": "1 год", "en": "1 year"}, "price": "4 999 ₽"}
+  ],
+  "terms": {
+    "ru": "Оплата разовая, на выбранный срок. Без автопродления: деньги сами не списываются. После оплаты напишите нам — пришлём ключ, вставьте его ниже. Продление до конца срока — новый срок считается с конца текущего. Когда срок закончится, Pro выключится сам, данные останутся.",
+    "en": "One-time payment for the chosen term. No auto-renewal: nothing is charged automatically. After paying, message us and we will send a key — paste it below. Renewing early adds the new term to the end of the current one. When the term ends, Pro turns off by itself and your data stays."
+  },
   "revoked": [
-    2
+    2,
+    3
   ]
 }

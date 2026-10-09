@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<title>Мастерио Pro — оплата</title>
+<!--
+  Страница оплаты Мастерио Pro (Про 21). Публикуется в SN-nsk/zapis → https://sn-nsk.github.io/zapis/pro.html
+  На неё ведёт кнопка «Оплатить на сайте» в приложении: pro.json → "payUrl".
+  Ссылки на оплату — многоразовые счета в кабинете ЮKassa (2990 ₽ / 6 мес, 4999 ₽ / год) — в PAY ниже.
+  Пустая ссылка — кнопка неактивна и показывает «Оплата скоро появится».
+  Цены здесь и в pro.json ("prices") должны совпадать.
+-->
+<style>
+:root{
+  --bg:#f5efe6;--surface:#fffaf3;--text:#2a2018;--muted:#76675a;--line:#e2d5c3;
+  --accent:#8f5328;--on-accent:#fffaf3;--sel:#f0dcc6;--warn-bg:#fbeee0;--focus:#c7782f;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1a1612;--surface:#241e18;--text:#f0e7db;--muted:#ad9e8c;--line:#3a3128;
+  --accent:#d39a62;--on-accent:#1a1612;--sel:#4a3423;--warn-bg:#2e241b;--focus:#e8b47f;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:680px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+h1{font-size:28px;line-height:1.2;margin:8px 0 6px}
+h2{font-size:19px;line-height:1.3;margin:30px 0 8px}
+p,ul,ol{margin:0 0 12px}
+ul,ol{padding-left:22px}
+li{margin:0 0 6px}
+a{color:var(--accent)}
+a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.sub{color:var(--muted);font-size:16px;margin:0 0 18px}
+.box{background:var(--warn-bg);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0}
+.box p:last-child{margin-bottom:0}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media (max-width:480px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.plan.best{border-color:var(--accent)}
+.plan .term{font-size:16px;color:var(--muted)}
+.plan .price{font-size:30px;font-weight:700;line-height:1.1}
+.plan .per{font-size:15px;color:var(--muted);min-height:22px}
+.pay{display:flex;align-items:center;justify-content:center;min-height:52px;margin-top:8px;border-radius:12px;
+  background:var(--accent);color:var(--on-accent);font-weight:600;text-decoration:none;font-size:17px;padding:8px 12px;text-align:center}
+.pay[aria-disabled=true]{background:var(--line);color:var(--muted);pointer-events:none}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+.contacts a{display:inline-flex;align-items:center;min-height:48px;padding:8px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;color:var(--text)}
+footer{color:var(--muted);font-size:14px;margin-top:36px;border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:0 0 6px}
+</style>
+</head>
+<body>
+<main>
+<h1>Мастерио Pro</h1>
+<p class="sub">Дополнительные функции для приложения «Мастерио». Всё основное в приложении бесплатно и останется бесплатным.</p>
+
+<h2>Что даёт Pro</h2>
+<ul>
+  <li><b>Автокопия в облако.</b> Каждую ночь приложение само делает резервную копию на ваш Яндекс Диск. Потеряли телефон — восстановили всё на новом.</li>
+  <li><b>Документы PDF с логотипом.</b> Смета, счёт, акт и договор из заказа в одно нажатие — можно сразу отправить клиенту.</li>
+  <li><b>Расход по QR чека.</b> Навели камеру на чек — сумма и дата расхода заполнились сами.</li>
+  <li><b>Откуда клиенты.</b> Сколько стоила реклама, сколько клиентов и денег она принесла, во сколько обошёлся один клиент.</li>
+</ul>
+<p>Новые функции Pro будут добавляться в обновлениях — без доплаты на оплаченный срок.</p>
+
+<h2>Цена</h2>
+<div class="plans">
+  <div class="plan">
+    <div class="term">6 месяцев</div>
+    <div class="price">2990 ₽</div>
+    <div class="per">≈ 498 ₽ в месяц</div>
+    <a class="pay" id="pay6" href="#" aria-disabled="true">Оплата скоро появится</a>
+  </div>
+  <div class="plan best">
+    <div class="term">1 год</div>
+    <div class="price">4999 ₽</div>
+    <div class="per">≈ 417 ₽ в месяц — выгоднее</div>
+    <a class="pay" id="pay12" href="#" aria-disabled="true">Оплата скоро появится</a>
+  </div>
+</div>
+
+<div class="box">
+<p><b>Это не подписка.</b> Вы платите один раз за выбранный срок. Деньги сами не списываются, продлевать или нет — решаете вы.</p>
+</div>
+
+<h2>Как получить Pro</h2>
+<ol>
+  <li>Нажмите «Оплатить» и оплатите картой, СБП или SberPay на странице ЮKassa. Укажите почту (или телефон) — туда придёт чек.</li>
+  <li>Напишите нам «Оплатил Pro» — в клуб «Мастерио» в Telegram или на почту. Можно добавить имя для ключа — его видно в приложении (например, «Иван, столяр»). Ключ пришлём в личные сообщения или на почту из оплаты, обычно в тот же день.</li>
+  <li>Скопируйте ключ целиком и вставьте в приложении: <b>Настройки → Мастерио Pro → У меня есть ключ</b>.</li>
+</ol>
+<div class="contacts">
+  <a href="https://t.me/masterio_club" rel="noopener noreferrer">Клуб «Мастерио» в Telegram</a>
+  <a href="mailto:sheven.sn@gmail.com?subject=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D0%BB%20Pro">sheven.sn@gmail.com</a>
+</div>
+<p>Не уверены? В приложении есть бесплатный пробный период на 14 дней: <b>Настройки → Мастерио Pro → Попробовать 14 дней</b>.</p>
+
+<h2>Условия</h2>
+<ul>
+  <li>Срок Pro считается со дня оплаты: 6 месяцев или 12 месяцев.</li>
+  <li><b>Продление.</b> Если продлеваете, пока Pro ещё действует, новый срок начнётся с конца текущего — оплаченные дни не пропадают.</li>
+  <li><b>Когда срок закончится,</b> все ваши данные остаются на месте и всё бесплатное работает. Документы и копии, сделанные с Pro, никуда не денутся; новые Pro-функции станут недоступны до продления. Автокопия остановится, уже сделанные копии останутся на вашем Яндекс Диске.</li>
+  <li>За неделю до конца срока приложение напомнит об этом.</li>
+  <li><b>Ключ не привязан к телефону</b> и сохраняется в резервной копии: при переезде на новый телефон Pro переедет вместе с данными. Если потеряли ключ — напишите нам, пришлём тот же.</li>
+  <li>Ключ — для вас лично. Ключ, выложенный в открытый доступ, мы можем отключить.</li>
+  <li>Для работы Pro не нужны аккаунт и интернет. Ваши данные и данные ваших клиентов мы не получаем — подробнее в <a href="privacy.html">политике конфиденциальности</a>.</li>
+</ul>
+
+<h2>Возврат денег</h2>
+<p>Если ключ не включает Pro и мы не смогли решить проблему — вернём деньги полностью. Напишите на <a href="mailto:sheven.sn@gmail.com">sheven.sn@gmail.com</a>, вернём на ту же карту или счёт, с которых была оплата. Ключ после возврата отключается.</p>
+<p>В остальных случаях Pro работает до конца оплаченного срока. Это не ограничивает ваши права по закону «О защите прав потребителей».</p>
+
+<footer>
+  <p>Продавец: Шевень Сергей Николаевич, самозанятый (налог на профессиональный доход), ИНН 543305087868, г. Новосибирск. Почта: <a href="mailto:sheven.sn@gmail.com">sheven.sn@gmail.com</a>.</p>
+  <p>Оплату принимает ЮKassa. Чек формируется автоматически и приходит на почту, указанную при оплате.</p>
+  <p lang="en">Masterio Pro is paid in rubles via YooKassa (Russian cards, SBP). Questions: sheven.sn@gmail.com.</p>
+</footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  // Многоразовые счета ЮKassa (кабинет → Счета). Только https://yookassa.ru/…
+  var PAY = {
+    pay6:  { url: 'https://yookassa.ru/my/i/ash4mhwKCtkF/l', label: 'Оплатить 2990 ₽' },
+    pay12: { url: 'https://yookassa.ru/my/i/ash44hXR5O_6/l', label: 'Оплатить 4999 ₽' }
+  };
+  for (var id in PAY) {
+    var a = document.getElementById(id), p = PAY[id];
+    if (a && /^https:\/\/([a-z0-9-]+\.)*yookassa\.ru\//.test(p.url)) {
+      a.href = p.url;
+      a.rel = 'noopener noreferrer';
+      a.removeAttribute('aria-disabled');
+      a.textContent = p.label;
+    }
+  }
+})();
+</script>
+</body>
+</html>

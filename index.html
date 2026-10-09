@@ -55,11 +55,13 @@ button:focus-visible,.msg:focus-visible{outline:3px solid var(--focus);outline-o
 .sum{font-size:15px;color:var(--muted);margin:0 0 8px;text-align:center;min-height:21px}
 .sum b{color:var(--text);font-weight:600}
 .big{font-size:20px;margin:28px 0 16px}
+.badge{margin:32px 0 0;text-align:center;font-size:14px;color:var(--muted)}
+.badge a{color:var(--muted);display:inline-flex;align-items:center;min-height:48px;padding:0 8px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
-<main id="app"></main>
+<main><div id="app"></div><p class="badge" id="badge" hidden><a id="badgeLink" href="app.html"></a></p></main>
 <div class="bar" id="bar" hidden><div><p class="sum" id="sum" aria-live="polite"></p><button class="btn" id="go" type="button" disabled></button></div></div>
 <script>
 (function () {
@@ -86,7 +88,8 @@ var T = {
     openTg: 'Написать в Telegram', openWa: 'Написать в WhatsApp', openMax: 'Позвонить мастеру', callNum: 'Открыть номер {p}',
     noChannel: 'Отправьте этот текст мастеру удобным способом.',
     pickChannel: 'Текст скопирован. Выберите, куда отправить его мастеру:',
-    maxNum: 'MAX: номер {p}'
+    maxNum: 'MAX: номер {p}',
+    badge: 'Запись через приложение «Мастерио»'
   },
   en: {
     title: 'Booking', freeAt: 'Free time as of', validTo: 'link valid until',
@@ -105,7 +108,8 @@ var T = {
     openTg: 'Message on Telegram', openWa: 'Message on WhatsApp', openMax: 'Call the master', callNum: 'Open number {p}',
     noChannel: 'Send this text to the master any way you like.',
     pickChannel: 'Text copied. Choose where to send it to the master:',
-    maxNum: 'MAX: number {p}'
+    maxNum: 'MAX: number {p}',
+    badge: 'Booked via the Masterio app'
   }
 };
 
@@ -152,8 +156,9 @@ function decode(hash) {
       }
       return { offset: x[0], windows: w };
     });
+    /* a[12] === 1 — мастер с Pro: без подписи «Мастерио» (Про 22). Нет или другое — подпись есть. */
     return { created: a[1], tz: a[2], linkId: a[3], base: a[4], name: a[5], ch: a[6], contact: a[7],
-      step: a[8], msg: a[9], services: services, days: days };
+      step: a[8], msg: a[9], services: services, days: days, noBadge: a[12] === 1 };
   } catch (e) { return null; }
 }
 
@@ -402,6 +407,9 @@ go.addEventListener('click', function () {
 function start() {
   st = { si: -1, day: -1, t: -1 };
   P = decode(location.hash);
+  var badge = document.getElementById('badge');
+  document.getElementById('badgeLink').textContent = L.badge;
+  badge.hidden = !!(P && P.noBadge);
   if (!P) { document.title = L.title; return screen(L.broken, null); }
   render();
 }

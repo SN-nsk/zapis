@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<title>Мастерио — учёт для мастеров</title>
+<!--
+  Страница о приложении (Про 22.4). Публикуется в SN-nsk/zapis → https://sn-nsk.github.io/zapis/app.html
+  На неё ведёт подпись «Запись через приложение «Мастерио»» внизу страницы онлайн-записи (бесплатная версия)
+  и ссылка «Сайт» в карточках магазинов. Когда приложение появится в RuStore — добавить ссылку в блок «Где скачать».
+-->
+<style>
+:root{
+  --bg:#f5efe6;--surface:#fffaf3;--text:#2a2018;--muted:#76675a;--line:#e2d5c3;
+  --accent:#8f5328;--on-accent:#fffaf3;--sel:#f0dcc6;--warn-bg:#fbeee0;--focus:#c7782f;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1a1612;--surface:#241e18;--text:#f0e7db;--muted:#ad9e8c;--line:#3a3128;
+  --accent:#d39a62;--on-accent:#1a1612;--sel:#4a3423;--warn-bg:#2e241b;--focus:#e8b47f;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:680px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+h1{font-size:28px;line-height:1.2;margin:8px 0 6px}
+h2{font-size:19px;line-height:1.3;margin:30px 0 8px}
+p,ul,ol{margin:0 0 12px}
+ul,ol{padding-left:22px}
+li{margin:0 0 6px}
+a{color:var(--accent)}
+a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.sub{color:var(--muted);font-size:16px;margin:0 0 18px}
+.box{background:var(--warn-bg);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0}
+.box p:last-child{margin-bottom:0}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media (max-width:480px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.plan.best{border-color:var(--accent)}
+.plan .term{font-size:16px;color:var(--muted)}
+.plan .price{font-size:30px;font-weight:700;line-height:1.1}
+.plan .per{font-size:15px;color:var(--muted);min-height:22px}
+.pay{display:flex;align-items:center;justify-content:center;min-height:52px;margin-top:8px;border-radius:12px;
+  background:var(--accent);color:var(--on-accent);font-weight:600;text-decoration:none;font-size:17px;padding:8px 12px;text-align:center}
+.pay[aria-disabled=true]{background:var(--line);color:var(--muted);pointer-events:none}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+.contacts a{display:inline-flex;align-items:center;min-height:48px;padding:8px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;color:var(--text)}
+footer{color:var(--muted);font-size:14px;margin-top:36px;border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:0 0 6px}
+</style>
+</head>
+<body>
+<main>
+<h1>Мастерио</h1>
+<p class="sub">Простой учёт клиентов, заказов, записей и денег для мастеров, самозанятых и небольших мастерских.</p>
+
+<div class="box">
+<p>Открыли — и сразу видно главное: что сегодня, кто должен, сколько заработано за месяц. Всё хранится на вашем телефоне: без регистрации, рекламы и слежки.</p>
+</div>
+
+<h2>Что умеет</h2>
+<ul>
+  <li><b>Клиенты</b> — контакты, заметки, фото, история заказов и посещений, долги.</li>
+  <li><b>Заказы</b> — цена, предоплата, остаток, сроки и статусы.</li>
+  <li><b>Записи</b> — календарь, напоминания, повторные записи.</li>
+  <li><b>Онлайн-запись по ссылке</b> — клиент сам выбирает время и пишет вам в мессенджер. Как та страница, с которой вы, возможно, сюда пришли.</li>
+  <li><b>Деньги</b> — доходы, расходы, сколько осталось вам с заказа, итоги месяца.</li>
+  <li><b>Профили под профессию</b> — изделия на заказ, ремонт, парикмахер, маникюр, косметолог, фотограф, репетитор и другие, или свои настройки.</li>
+</ul>
+<p>Всё это бесплатно. Для тех, кому нужно больше, есть необязательный <a href="pro.html">Мастерио Pro</a>: автокопия на Яндекс Диск, документы PDF, расход по QR чека и другое.</p>
+
+<h2>Где скачать</h2>
+<p>Приложение готовится к выходу в RuStore. Следить за новостями и задать вопрос можно в клубе «Мастерио»:</p>
+<div class="contacts">
+  <a href="https://t.me/masterio_club" rel="noopener noreferrer">Клуб «Мастерио» в Telegram</a>
+  <a href="mailto:sheven.sn@gmail.com">sheven.sn@gmail.com</a>
+</div>
+
+<footer>
+  <p>Разработчик: Шевень Сергей Николаевич, самозанятый, г. Новосибирск.</p>
+  <p><a href="privacy.html">Политика конфиденциальности</a> · <a href="pro.html">Мастерио Pro</a> · <a href="oferta.html">Оферта</a></p>
+  <p lang="en">Masterio is a simple app for craftspeople: clients, orders, appointments and money, stored on your phone. No account, no ads.</p>
+</footer>
+</main>
+</body>
+</html>

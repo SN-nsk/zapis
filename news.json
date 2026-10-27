@@ -2,6 +2,25 @@
   "format": 1,
   "items": [
     {
+      "id": "2026-10-rustore",
+      "date": "2026-10-27",
+      "kind": "news",
+      "title": {
+        "ru": "Мастерио теперь в RuStore",
+        "en": "Masterio is now on RuStore"
+      },
+      "text": {
+        "ru": "Приложение вышло в RuStore — обновления теперь будут приходить оттуда сами. Если у вас тестовая версия из группы, она не обновится до магазинной: сделайте резервную копию (Настройки → Резервная копия), сохраните файл копии себе, удалите старую версию, установите Мастерио из RuStore и восстановите данные из копии. Pro сохранится.",
+        "en": "Masterio is now on RuStore and will update from there. If you have a test build from the group, it can't be updated to the store version: make a backup (Settings → Backup), save the file somewhere safe, uninstall the old version, install Masterio from RuStore and restore from the backup. Pro is kept."
+      },
+      "button": {
+        "ru": "Открыть в RuStore",
+        "en": "Open in RuStore"
+      },
+      "url": "https://www.rustore.ru/catalog/app/ru.masterio.app",
+      "notify": true
+    },
+    {
       "id": "2026-10-04-welcome",
       "date": "2026-10-04",
       "kind": "news",

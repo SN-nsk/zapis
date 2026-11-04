@@ -2,42 +2,23 @@
   "format": 1,
   "items": [
     {
-      "id": "2026-10-rustore",
-      "date": "2026-10-27",
+      "id": "2026-11-v1-1",
+      "date": "2026-11-04",
       "kind": "news",
       "title": {
-        "ru": "Мастерио теперь в RuStore",
-        "en": "Masterio is now on RuStore"
+        "ru": "Вышло обновление 1.1",
+        "en": "Update 1.1 is out"
       },
       "text": {
-        "ru": "Приложение вышло в RuStore — обновления теперь будут приходить оттуда сами. Если у вас тестовая версия из группы, она не обновится до магазинной: сделайте резервную копию (Настройки → Резервная копия), сохраните файл копии себе, удалите старую версию, установите Мастерио из RuStore и восстановите данные из копии. Pro сохранится.",
-        "en": "Masterio is now on RuStore and will update from there. If you have a test build from the group, it can't be updated to the store version: make a backup (Settings → Backup), save the file somewhere safe, uninstall the old version, install Masterio from RuStore and restore from the backup. Pro is kept."
+        "ru": "Приложение стало удобнее и надёжнее: введённое не теряется при переходе между разделами, точнее учёт денег и склада, крупнее кнопки и аккуратнее экраны. Если обновление ещё не пришло само — обновите Мастерио в RuStore, данные и Pro сохранятся. Спасибо всем, кто пишет замечания: многое из них вошло в это обновление.",
+        "en": "The app is now easier and more reliable: what you type is kept when switching sections, money and stock are counted more precisely, buttons are bigger and screens are tidier. If the update hasn't arrived yet, update Masterio in RuStore — your data and Pro are kept. Thanks to everyone who sends feedback: much of it went into this update."
       },
       "button": {
-        "ru": "Открыть в RuStore",
-        "en": "Open in RuStore"
+        "ru": "Обновить в RuStore",
+        "en": "Update in RuStore"
       },
       "url": "https://www.rustore.ru/catalog/app/ru.masterio.app",
       "notify": true
-    },
-    {
-      "id": "2026-10-04-welcome",
-      "date": "2026-10-04",
-      "kind": "news",
-      "title": {
-        "ru": "В приложении появился раздел «Новости»",
-        "en": "The app now has a News section"
-      },
-      "text": {
-        "ru": "Здесь будут появляться новости об обновлениях, советы и короткие опросы. Отвечать необязательно, но каждый ответ помогает сделать «Мастерио» удобнее. Если что-то неудобно или есть идея — напишите в нашу группу в Telegram.",
-        "en": "News about updates, tips and short surveys will appear here. Answering is optional, but every answer helps make Masterio better. If something is inconvenient or you have an idea, write to our Telegram group."
-      },
-      "button": {
-        "ru": "Открыть группу",
-        "en": "Open the group"
-      },
-      "url": "https://t.me/masterio_club",
-      "notify": false
     }
   ]
 }

@@ -2,23 +2,23 @@
   "format": 1,
   "items": [
     {
-      "id": "2026-11-v1-1",
-      "date": "2026-11-04",
+      "id": "2026-11-max-channel",
+      "date": "2026-11-06",
       "kind": "news",
       "title": {
-        "ru": "Вышло обновление 1.1",
-        "en": "Update 1.1 is out"
+        "ru": "«Мастерио» теперь в МАКС",
+        "en": "Masterio is now on MAX"
       },
       "text": {
-        "ru": "Приложение стало удобнее и надёжнее: введённое не теряется при переходе между разделами, точнее учёт денег и склада, крупнее кнопки и аккуратнее экраны. Если обновление ещё не пришло само — обновите Мастерио в RuStore, данные и Pro сохранятся. Спасибо всем, кто пишет замечания: многое из них вошло в это обновление.",
-        "en": "The app is now easier and more reliable: what you type is kept when switching sections, money and stock are counted more precisely, buttons are bigger and screens are tidier. If the update hasn't arrived yet, update Masterio in RuStore — your data and Pro are kept. Thanks to everyone who sends feedback: much of it went into this update."
+        "ru": "Открыли канал в МАКС: там новости, обновления и подсказки. Вопрос или идею можно оставить в комментариях под постами или написать в чате мастеров. Клуб в Telegram тоже остаётся — выбирайте, где удобнее.",
+        "en": "We've opened a channel on MAX with news, updates and tips. Leave questions and ideas in the comments or in the masters' chat. Our Telegram club stays too — use whichever you like."
       },
       "button": {
-        "ru": "Обновить в RuStore",
-        "en": "Update in RuStore"
+        "ru": "Открыть канал в МАКС",
+        "en": "Open MAX channel"
       },
-      "url": "https://www.rustore.ru/catalog/app/ru.masterio.app",
-      "notify": true
+      "url": "https://max.ru/channel_masterio_club",
+      "notify": false
     }
   ]
 }

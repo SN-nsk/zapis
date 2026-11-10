@@ -2,6 +2,26 @@
   "format": 1,
   "items": [
     {
+      "id": "2026-11-telegram-apk-update",
+      "date": "2026-11-10",
+      "kind": "news",
+      "title": {
+        "ru": "Важно: ставили Мастерио по ссылке из Telegram?",
+        "en": "Important: installed Masterio from a Telegram link?"
+      },
+      "text": {
+        "ru": "Эту раннюю сборку нельзя обновить через RuStore поверх. Телефон удалит старое приложение вместе со всеми клиентами, заказами и деньгами.\n\nЧтобы ничего не потерять, обновляйтесь так:\n1. Настройки → Резервная копия → «Сделать копию».\n2. «Отправить файл копии» — себе в Telegram («Избранное») или на почту.\n3. Удалите Мастерио и поставьте из RuStore.\n4. В новом приложении: Настройки → Резервная копия → «Восстановить из копии» и выберите этот файл.\n\nЕсли ставили копию с паролем — не забудьте пароль.\n\nЧто-то непонятно — напишите в клубе, поможем.",
+        "en": "This early build can't be updated from RuStore on top. The phone will remove the old app together with all your clients, orders and money.\n\nTo keep your data:\n1. Settings → Backup → make a backup.\n2. Send the backup file to yourself (Telegram Saved Messages or email).\n3. Remove Masterio and install it from RuStore.\n4. In the new app: Settings → Backup → restore from backup and pick that file.\n\nIf your backup has a password, keep it.\n\nQuestions? Write to us in the club."
+      },
+      "button": {
+        "ru": "Написать в клуб",
+        "en": "Write to the club"
+      },
+      "url": "https://t.me/masterio_club",
+      "maxVersion": 100,
+      "notify": true
+    },
+    {
       "id": "2026-11-max-channel",
       "date": "2026-11-06",
       "kind": "news",

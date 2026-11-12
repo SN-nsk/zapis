@@ -2,6 +2,25 @@
   "format": 1,
   "items": [
     {
+      "id": "2026-11-v1-3",
+      "date": "2026-11-12",
+      "kind": "news",
+      "title": {
+        "ru": "Вышло обновление 1.3",
+        "en": "Update 1.3 is out"
+      },
+      "text": {
+        "ru": "Самое большое обновление Мастерио:\n• календарь заказов и записей (Pro);\n• занятое время из календаря телефона и перенос записей туда (Pro);\n• напоминание клиенту накануне записи (Pro);\n• задачи на день с галочками (Pro);\n• возврат денег клиенту;\n• фото картинками — листаются и увеличиваются;\n• несколько адресов у клиента с Яндекс Картами и 2ГИС;\n• калькулятор в каждом поле суммы;\n• выгрузка доходов и расходов в Excel;\n• журнал резервных копий и отмена восстановления;\n• настройки по разделам, главная проще.\n\nСпасибо всем, кто пишет идеи и замечания!",
+        "en": "The biggest Masterio update yet:\n• calendar of orders and bookings (Pro);\n• busy time from your phone calendar, and bookings copied to it (Pro);\n• reminder to a client the day before a booking (Pro);\n• daily tasks with checkboxes (Pro);\n• refunds to clients;\n• photos shown as pictures — swipe and zoom;\n• several addresses per client with Yandex Maps and 2GIS;\n• calculator in every amount field;\n• export of income and expenses to Excel;\n• backup log and undo restore;\n• settings grouped into sections, a simpler home screen.\n\nThanks to everyone who sends ideas and feedback!"
+      },
+      "button": {
+        "ru": "Обновить в RuStore",
+        "en": "Update in RuStore"
+      },
+      "url": "https://www.rustore.ru/catalog/app/ru.masterio.app",
+      "notify": true
+    },
+    {
       "id": "2026-11-telegram-apk-update",
       "date": "2026-11-10",
       "kind": "news",
@@ -20,25 +39,6 @@
       "url": "https://t.me/masterio_club",
       "maxVersion": 100,
       "notify": true
-    },
-    {
-      "id": "2026-11-max-channel",
-      "date": "2026-11-06",
-      "kind": "news",
-      "title": {
-        "ru": "«Мастерио» теперь в МАКС",
-        "en": "Masterio is now on MAX"
-      },
-      "text": {
-        "ru": "Открыли канал в МАКС: там новости, обновления и подсказки. Вопрос или идею можно оставить в комментариях под постами или написать в чате мастеров. Клуб в Telegram тоже остаётся — выбирайте, где удобнее.",
-        "en": "We've opened a channel on MAX with news, updates and tips. Leave questions and ideas in the comments or in the masters' chat. Our Telegram club stays too — use whichever you like."
-      },
-      "button": {
-        "ru": "Открыть канал в МАКС",
-        "en": "Open MAX channel"
-      },
-      "url": "https://max.ru/channel_masterio_club",
-      "notify": false
     }
   ]
 }

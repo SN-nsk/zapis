@@ -10,7 +10,7 @@
 <!--
   Страница оплаты Мастерио Pro (Про 21). Публикуется в SN-nsk/zapis → https://sn-nsk.github.io/zapis/pro.html
   На неё ведёт кнопка «Оплатить на сайте» в приложении: pro.json → "payUrl".
-  Ссылки на оплату — многоразовые счета в кабинете ЮKassa (2990 ₽ / 6 мес, 4999 ₽ / год) — в PAY ниже.
+  Ссылки на оплату — многоразовые счета в кабинете ЮKassa (1490 ₽ / 6 мес, 2490 ₽ / год) — в PAY ниже.
   Пустая ссылка — кнопка неактивна и показывает «Оплата скоро появится».
   Цены здесь и в pro.json ("prices") должны совпадать.
 -->
@@ -73,14 +73,14 @@ footer p{margin:0 0 6px}
 <div class="plans">
   <div class="plan">
     <div class="term">6 месяцев</div>
-    <div class="price">2990 ₽</div>
-    <div class="per">≈ 498 ₽ в месяц</div>
+    <div class="price">1490 ₽</div>
+    <div class="per">≈ 248 ₽ в месяц</div>
     <a class="pay" id="pay6" href="#" aria-disabled="true">Оплата скоро появится</a>
   </div>
   <div class="plan best">
     <div class="term">1 год</div>
-    <div class="price">4999 ₽</div>
-    <div class="per">≈ 417 ₽ в месяц — выгоднее</div>
+    <div class="price">2490 ₽</div>
+    <div class="per">≈ 208 ₽ в месяц — выгоднее</div>
     <a class="pay" id="pay12" href="#" aria-disabled="true">Оплата скоро появится</a>
   </div>
 </div>
@@ -131,8 +131,8 @@ footer p{margin:0 0 6px}
   'use strict';
   // Многоразовые счета ЮKassa (кабинет → Счета). Только https://yookassa.ru/…
   var PAY = {
-    pay6:  { url: 'https://yookassa.ru/my/i/ash4mhwKCtkF/l', label: 'Оплатить 2990 ₽' },
-    pay12: { url: 'https://yookassa.ru/my/i/ash44hXR5O_6/l', label: 'Оплатить 4999 ₽' }
+    pay6:  { url: 'https://yookassa.ru/my/i/avhVvFoIwHrL/l', label: 'Оплатить 1490 ₽' },
+    pay12: { url: 'https://yookassa.ru/my/i/avhWJ65gTLb9/l', label: 'Оплатить 2490 ₽' }
   };
   for (var id in PAY) {
     var a = document.getElementById(id), p = PAY[id];

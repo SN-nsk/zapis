@@ -2,6 +2,25 @@
   "format": 1,
   "items": [
     {
+      "id": "2026-11-19-v1-3-2",
+      "date": "2026-11-19",
+      "kind": "news",
+      "title": {
+        "ru": "Вышло обновление 1.3.2",
+        "en": "Update 1.3.2 is out"
+      },
+      "text": {
+        "ru": "Обновление 1.3.2 — календарь для работы:\n• календарь в четырёх видах: «Месяц», «Неделя», «3 дня» и «День» с расписанием по часам;\n• заказы — полосами от начала работы до срока сдачи; замеры, монтажи и сроки оплат по дням;\n• записи, задачи, замеры и крайние сроки заказов — прямо из выбранного дня календаря;\n• запись можно перенести пальцем на другое время — и сразу сообщить клиенту;\n• задачи: цветные отметки и галочка «выполнено» прямо в календаре; многодневные задачи занимают все дни сразу;\n• в заказе появилось поле «Сколько дней делать» — Мастерио подскажет, когда начнёте и когда будет готово, с учётом уже взятых заказов;\n• загруженные дни подсвечиваются;\n• при создании задачи из календаря выбранная дата подставляется сама.\n\nСпасибо всем, кто пишет идеи и замечания!",
+        "en": "Update 1.3.2 — a calendar for work:\n• calendar in four views: Month, Week, 3 days and Day with an hourly schedule;\n• orders as bars from work start to deadline; site visits, installs and payment due dates by day;\n• add appointments, tasks, site visits and order deadlines right from the chosen day;\n• drag an appointment to another time — and tell the client right away;\n• tasks: colour markers and a tick right in the calendar; multi-day tasks occupy all their days;\n• orders now have a «Days of work» field — Masterio suggests when you start and when it will be ready, counting the orders you already have;\n• busy days are highlighted;\n• creating a task from the calendar pre-fills the chosen date.\n\nThanks to everyone who sends ideas and feedback!"
+      },
+      "button": {
+        "ru": "Обновить в RuStore",
+        "en": "Update in RuStore"
+      },
+      "url": "https://www.rustore.ru/catalog/app/ru.masterio.app",
+      "notify": true
+    },
+    {
       "id": "2026-11-v1-3",
       "date": "2026-11-12",
       "kind": "news",
